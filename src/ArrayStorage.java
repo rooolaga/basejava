@@ -18,31 +18,25 @@ public class ArrayStorage {
     }
 
     Resume get(String uuid) {
-        Resume resume = null;
-        for (Resume value : storage) {
-            if (value != null && value.uuid.equals(uuid)) {
-                resume = value;
-                break;
+        for (int i = 0; i < size; i++) {
+            if (uuid.equals(storage[i].uuid)) {
+                return storage[i];
             }
         }
-        return resume;
+        return null;
     }
 
     void delete(String uuid) {
-        int positionShift = 0;
         for (int i = 0; i < size; i++) {
-            if (storage[i].uuid.equals(uuid)) positionShift++;
-
-            if (positionShift > 0) {
-                if (i + positionShift <= storage.length) {
-                    storage[i] = storage[i + positionShift];
-                } else {
-                    storage[i] = null;
-                }
+            Resume[] tmpStorage = new Resume[10000];
+            if (storage[i].uuid.equals(uuid)) {
+                System.arraycopy(storage, 0, tmpStorage, 0, i);
+                System.arraycopy(storage, i + 1, tmpStorage, i, storage.length - i - 1);
+                storage = tmpStorage;
+                size--;
+                break;
             }
         }
-
-        size -= positionShift;
     }
 
     /**
