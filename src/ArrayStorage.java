@@ -28,11 +28,8 @@ public class ArrayStorage {
 
     void delete(String uuid) {
         for (int i = 0; i < size; i++) {
-            Resume[] tmpStorage = new Resume[10000];
             if (storage[i].uuid.equals(uuid)) {
-                System.arraycopy(storage, 0, tmpStorage, 0, i);
-                System.arraycopy(storage, i + 1, tmpStorage, i, storage.length - i - 1);
-                storage = tmpStorage;
+                System.arraycopy(storage, i + 1, storage, i, storage.length - i - 1);
                 size--;
                 break;
             }
