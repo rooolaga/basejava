@@ -8,7 +8,7 @@ import java.util.Arrays;
  * Array based storage for Resumes
  */
 public class ArrayStorage {
-    Resume[] storage = new Resume[10000];
+    private Resume[] storage = new Resume[10000];
     private int size = 0;
 
     public void clear() {
@@ -18,33 +18,38 @@ public class ArrayStorage {
 
     public void save(Resume resume) {
         if (size < storage.length) {
-            if (getResumePos(resume.uuid) == null) {
+            if (getResumePos(resume.getUuid()) == -1) {
                 storage[size] = resume;
                 size++;
             } else {
-                System.out.println("This resume is already in the array");
+                System.out.println("This resume " + resume.getUuid() + " is already in the array");
             }
         } else {
-            System.out.println("The array is full");
+            System.out.println("The array is full. Resume " + resume.getUuid() + " has not saved");
         }
     }
 
     public Resume get(String uuid) {
-        Integer resumePos = getResumePos(uuid);
-        return resumePos != null ? storage[resumePos] : null;
+        int index = getResumePos(uuid);
+        return index != -1 ? storage[index] : null;
     }
 
     public void delete(String uuid) {
-        Integer resumePos = getResumePos(uuid);
-        if (resumePos != null) {
-            System.arraycopy(storage, resumePos + 1, storage, resumePos, storage.length - resumePos - 1);
+        int index = getResumePos(uuid);
+        if (index != -1) {
+            System.arraycopy(storage, index + 1, storage, index, storage.length - index - 1);
             size--;
+        } else {
+            System.out.println("Resume " + uuid + " has not deleted");
         }
     }
 
     public void update(Resume resume) {
-        Integer resumePos = getResumePos(resume.uuid);
-        if (resumePos != null) storage[resumePos] = resume;
+        int index = getResumePos(resume.getUuid());
+        if (index != -1)
+            storage[index] = resume;
+        else
+            System.out.println("Resume " + resume.getUuid() + " has not updated");
     }
 
     /**
@@ -58,13 +63,13 @@ public class ArrayStorage {
         return size;
     }
 
-    Integer getResumePos(String uuid) {
+    public int getResumePos(String uuid) {
         for (int i = 0; i < size; i++) {
-            if (uuid.equals(storage[i].uuid)) {
+            if (uuid.equals(storage[i].getUuid())) {
                 return i;
             }
         }
-        System.out.println("Resume is not found");
-        return null;
+        System.out.println("Resume " + uuid + " is not found");
+        return -1;
     }
 }
