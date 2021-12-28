@@ -37,7 +37,7 @@ public class ArrayStorage {
     public void delete(String uuid) {
         int index = getResumePos(uuid);
         if (index != -1) {
-            System.arraycopy(storage, index + 1, storage, index, storage.length - index - 1);
+            System.arraycopy(storage, index + 1, storage, index, size - 1);
             size--;
         } else {
             System.out.println("Resume " + uuid + " has not deleted");
